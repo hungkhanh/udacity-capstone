@@ -40,6 +40,9 @@ class Product {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  // @Column()
+  // public content: string;
 }
 
 export default Product;

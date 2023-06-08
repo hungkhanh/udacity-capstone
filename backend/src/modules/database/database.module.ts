@@ -17,7 +17,7 @@ import Product from '../products/entities/product.entity';
         database: configService.get('POSTGRES_POSTGRES'),
         entities: [Product],
         migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-        synchronize: true,
+        synchronize: false,
         logging: true,
         cli: {
           migrationsDir: 'src/modules/database/migrations',
