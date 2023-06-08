@@ -10,44 +10,47 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ProductService } from './services/product.service';
+import { ProductRepository } from './repositories/product.repository';
 
 @Controller('products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
   @Post()
   createProduct(@Body() data: CreateProductDto) {
-    return this.productService.createProduct(data);
+    console.log(data);
+    return this.productRepository.createProduct(data);
   }
 
   @Get('all')
   getAllProduct() {
-    return this.productService.findAllProduct();
+    return this.productRepository.findAllProducts();
   }
 
   @Get()
   getOneProduct(@Query('id') product_id: number) {
-    return this.productService.findOneProduct(product_id);
+    return this.productRepository.findProductById(product_id);
   }
 
   @Put()
   updateProduct(@Body() data: UpdateProductDto) {
-    return this.productService.updateProduct(data);
+    return this.productRepository.updateProduct(data);
   }
 
   @Patch('published')
   publishedProduct(@Query('id') product_id: number) {
-    return this.productService.publishedProduct(product_id);
+    const isPublished = true;
+    return this.productRepository.changeProduct(product_id, isPublished);
   }
 
   @Patch('unpublished')
   unpublishedProduct(@Query('id') product_id: number) {
-    return this.productService.unpublishedProduct(product_id);
+    const isPublished = false;
+    return this.productRepository.changeProduct(product_id, isPublished);
   }
 
   @Delete()
   deleteProduct(@Query('id') product_id: number) {
-    return this.productService.deleteProduct(product_id);
+    return this.productRepository.deleteProduct(product_id);
   }
 }

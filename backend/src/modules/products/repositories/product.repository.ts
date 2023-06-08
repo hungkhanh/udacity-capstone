@@ -1,7 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { getSelectData } from 'src/utils/selectQuery';
-import { updateProduct } from 'src/utils/update';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
@@ -39,7 +37,15 @@ export class ProductRepository {
       'product_tags',
     ];
     return await this.productRepository.find({
-      select: getSelectData(select),
+      select: [
+        'product_name',
+        'product_description',
+        'product_price',
+        'product_quantity',
+        'product_type',
+        'product_attributes',
+        'product_tags',
+      ],
     });
   }
 
@@ -56,7 +62,17 @@ export class ProductRepository {
       'product_tags',
     ];
     return await this.productRepository.findOne({
-      select: getSelectData(select),
+      select: [
+        'id',
+        'product_name',
+        'product_description',
+        'product_price',
+        'product_quantity',
+        'product_type',
+        'product_attributes',
+        'isPublished',
+        'product_tags',
+      ],
       where: { id: product_id },
     });
   }
@@ -71,11 +87,10 @@ export class ProductRepository {
     if (!foundProduct) {
       throw new NotFoundException('Error: Not found product');
     }
-    updateProduct(data, foundProduct);
+    this.updateProperties(data, foundProduct);
     return await this.productRepository.save(foundProduct);
   }
 
-  // published & unpublished
   async changeProduct(product_id: number, isPublished: boolean) {
     const foundProduct = await this.productRepository.findOne({
       where: {
@@ -91,7 +106,6 @@ export class ProductRepository {
     });
   }
 
-  // delete
   async deleteProduct(product_id: number) {
     const foundProduct = await this.productRepository.findOne({
       where: {
@@ -103,5 +117,14 @@ export class ProductRepository {
       throw new NotFoundException('Error: Not found product');
     }
     return await this.productRepository.delete(product_id);
+  }
+
+  private updateProperties(product1, product2) {
+    Object.keys(product1).forEach((key) => {
+      if (product1[key]) {
+        product2[key] = product1[key];
+      }
+    });
+    return product2;
   }
 }
