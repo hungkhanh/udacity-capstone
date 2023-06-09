@@ -17,7 +17,7 @@ class Product {
   @Column()
   public product_description: string;
 
-  @Column()
+  @Column({ type: 'real' })
   public product_price: number;
 
   @Column()

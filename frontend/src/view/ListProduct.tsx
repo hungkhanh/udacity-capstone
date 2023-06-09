@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TheNavbar from "./components/TheNavbar";
 import TheTable from "./components/TheTable";
-import TheBreadcrumb from "./components/TheBreadcrumb";
 
 function ListProduct() {
+  const [listProducts, setListProducts] = useState<any[]>([])
+  console.log("render")
+  
+  useEffect(() => {
+    fetch("http://localhost:3000/products/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(async(res) => {
+      const response = await res.json()
+      setListProducts(response)
+    }).catch((err) => {
+      console.log(err)
+    })
+  },[])
   return (
     <div>
       <TheNavbar></TheNavbar>
-      <TheBreadcrumb />
-      <TheTable />
+      <TheTable list={listProducts} />
     </div>
   );
 }

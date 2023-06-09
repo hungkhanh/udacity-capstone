@@ -38,6 +38,7 @@ export class ProductRepository {
     ];
     return await this.productRepository.find({
       select: [
+        'id',
         'product_name',
         'product_description',
         'product_price',
@@ -45,6 +46,7 @@ export class ProductRepository {
         'product_type',
         'product_attributes',
         'product_tags',
+        'isPublished',
       ],
     });
   }
