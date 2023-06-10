@@ -64,8 +64,32 @@ jobs:
   build-and-deploy-backend:
     jobs:
       - aws-ecr/build-and-push-image:
+          aws-access-key-id: $AWS_ACCESS_KEY_ID
+          aws-secret-access-key: $AWS_SECRET_ACCESS_KEY
+          region: $AWS_DEFAULT_REGION
+          registry-id: $AWS_ECR_REGISTRY_ID
+          aws-cli-version: latest
+          dockerfile: backend/Dockerfile
           repo: "udacity"
           tag: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+          # context: https://github.com/hungkhanh/udacity-capstone/tree/master/backend
+          # create-repo: true
+          # executor: aws-ecr/default
+          # extra-build-args: '--compress'
+          # new-profile-name: newProfileName
+          # no-output-timeout: 20m
+          # path: pathToMyDockerfile
+          # platform: linux/amd64
+          # profile-name: myProfileName
+          # public-registry: false
+          # push-image: true
+          # repo-policy-path: repo-policy.json
+          # repo-scan-on-push: true
+          # role-arn: arn:aws:iam::123456789012:role/testing
+          # set-repo-policy: true
+          # skip-when-tags-exist: false
+          # source-profile: sourceProfileName
 
 workflows:
   default:
