@@ -6,7 +6,6 @@ jobs:
       - image: cimg/node:18.12
     steps:
       - checkout
-      - run: node --version      
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -17,9 +16,25 @@ jobs:
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build      
+          key: backend-build     
+
+  test-backend:
+    docker:
+      - image: cimg/node:18.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Test backend
+          command: |
+            cd backend
+            npm install
+            npm run test
 
 workflows:
   default:
     jobs:
       - build-backend
+      - test-backend:
+          requires: [build-backend]
