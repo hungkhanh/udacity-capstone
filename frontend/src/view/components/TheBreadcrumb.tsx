@@ -1,14 +1,17 @@
 import React from 'react';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 
-function TheBreadcrumb() {
+interface BreadcrumbProps {
+  listBreadcrumb  : any[];
+}
+function TheBreadcrumb({listBreadcrumb} : BreadcrumbProps) {
   return (
     <Breadcrumb>
-      <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-      <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-        Library
-      </Breadcrumb.Item>
-      <Breadcrumb.Item active>Data</Breadcrumb.Item>
+    {
+      listBreadcrumb.map((item : any, index: number) => (
+        <Breadcrumb.Item href={item.href} active={index === (listBreadcrumb.length-1)}>{item.name}</Breadcrumb.Item>
+      ))
+    }
     </Breadcrumb>
   );
 }

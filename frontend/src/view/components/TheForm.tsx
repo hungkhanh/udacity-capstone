@@ -5,8 +5,11 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import Spinner from 'react-bootstrap/Spinner';
+import { useNavigate } from 'react-router-dom';
 
 function TheForm() {
+  const [isLoaded, setIsLoaded] = useState<boolean>(true)
   const [tags, setTags] = useState<string[]>([])
   const [name, setName] = useState<string>('')
   const [description, setDescription] = useState<string>('')
@@ -14,6 +17,7 @@ function TheForm() {
   const [quantity, setQuantity] = useState<number>(1)
   const [type, setType] = useState<string>('')
   const [attr, setAttr] = useState<string>('')
+  const navigate = useNavigate();
 
   const handleKeyPress = (event: { key: string; preventDefault: () => void; }) => {
     if (event.key === 'Enter') {
@@ -23,6 +27,7 @@ function TheForm() {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
+    setIsLoaded(false)
     const data = {
       "product_name": name,
       "product_description": description,
@@ -34,26 +39,27 @@ function TheForm() {
     }
     console.log(data)
     fetch("http://localhost:3000/products",{
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify(data),
       }
     ).then((res) => {
       console.log(res)
+      navigate("/list-product")
     }).catch((err) => {
       console.log(err)
+    }).finally(() => {
+      setIsLoaded(true)
     })
   }
   return (
-    <div className='form-input' style={{
-      width: '90%',
+    <div style={{
       margin: '40px auto 10px',
       border: '1px solid #e2e3e5',
-      borderRadius: '50px',
-      padding: '40px'
+      borderRadius: '10px',
+      padding: '30px',
     }}>
       <Form onSubmit={handleSubmit}>
       <Row className="mb-3">
@@ -110,11 +116,12 @@ function TheForm() {
         ))}
       </ol>
       </Form.Group>
-      
-        
-      <Button variant="primary" type="submit">
+      {
+        isLoaded ? <Button variant="primary" type="submit">
         Create
-      </Button>
+      </Button> : <Spinner animation="border" variant="secondary"/>
+      }
+      
     </Form>
     </div>
     

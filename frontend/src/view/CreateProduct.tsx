@@ -1,12 +1,13 @@
 import React from 'react';
 import TheForm from './components/TheForm';
-import TheNavbar from './components/TheNavbar';
+import Container from 'react-bootstrap/Container';
 
 function CreateProduct() {
   return (
     <div>
-      <TheNavbar />
-      <TheForm />
+      <Container>
+        <TheForm />
+      </Container>
     </div>
   );
 }
