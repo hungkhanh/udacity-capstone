@@ -1,18 +1,9 @@
 version: 2.1
 
-jobs:
-  lint-backend:
-    docker:
-      - image: cimg/node:18.12
-    steps:
-      - checkout
-      - run:
-          name: Lint backend
-          command: |
-            cd backend
-            npm install
-            npm run lint
+orbs:
+  aws-ecr: circleci/aws-ecr@8.2.1
 
+jobs:
   build-backend:
     docker:
       - image: cimg/node:18.12
@@ -28,7 +19,7 @@ jobs:
             npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-build     
+          key: backend-build
 
   test-backend:
     docker:
@@ -58,13 +49,33 @@ jobs:
             npm install
             npm audit fix
 
+  lint-backend:
+    docker:
+      - image: cimg/node:18.12
+    steps:
+      - checkout
+      - run:
+          name: Lint backend
+          command: |
+            cd backend
+            npm install
+            npm run lint
+
+  build-and-deploy-backend:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          repo: "udacity"
+          tag: "${CIRCLE_WORKFLOW_ID:0:7}"
+
 workflows:
   default:
     jobs:
-      - lint-backend
       - build-backend:
-          requires: [lint-backend]
       - test-backend:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
+      - lint-backend:
+          requires: [build-backend]
+      - build-and-deploy-backend:
+          requires: [test-backend, scan-backend, lint-backend]
