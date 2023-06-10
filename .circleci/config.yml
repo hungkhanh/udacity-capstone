@@ -1,6 +1,17 @@
 version: 2.1
 
 jobs:
+  lint-backend:
+    docker:
+      - image: cimg/node:18.12
+    steps:
+      - checkout
+      - run:
+          name: Lint backend
+          command: |
+            cd backend
+            npm run lint
+
   build-backend:
     docker:
       - image: cimg/node:18.12
@@ -49,7 +60,9 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-backend
+      - lint-backend
+      - build-backend:
+          requires: [lint-backend]
       - test-backend:
           requires: [build-backend]
       - scan-backend:
