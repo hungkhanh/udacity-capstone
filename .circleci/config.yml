@@ -1,14 +1,23 @@
 version: 2.1
 
 jobs:
-  say-hello:
+  build-backend:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:18.12
     steps:
       - checkout
+      - run: node --version      
+      - restore_cache:
+          keys: [backend-build]
       - run:
-          name: "Say hello"
-          command: "echo Hello, World!"
+          name: Build backend
+          command: |
+            cd backend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build      
 
 workflows:
   default:

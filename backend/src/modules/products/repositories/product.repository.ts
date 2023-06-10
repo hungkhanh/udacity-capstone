@@ -27,15 +27,15 @@ export class ProductRepository {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    const select = [
-      'product_name',
-      'product_description',
-      'product_price',
-      'product_quantity',
-      'product_type',
-      'product_attributes',
-      'product_tags',
-    ];
+    // const select = [
+    //   'product_name',
+    //   'product_description',
+    //   'product_price',
+    //   'product_quantity',
+    //   'product_type',
+    //   'product_attributes',
+    //   'product_tags',
+    // ];
     return await this.productRepository.find({
       select: [
         'id',
@@ -52,17 +52,17 @@ export class ProductRepository {
   }
 
   async findProductById(product_id: number): Promise<Product> {
-    const select = [
-      'id',
-      'product_name',
-      'product_description',
-      'product_price',
-      'product_quantity',
-      'product_type',
-      'product_attributes',
-      'isPublished',
-      'product_tags',
-    ];
+    // const select = [
+    //   'id',
+    //   'product_name',
+    //   'product_description',
+    //   'product_price',
+    //   'product_quantity',
+    //   'product_type',
+    //   'product_attributes',
+    //   'isPublished',
+    //   'product_tags',
+    // ];
     return await this.productRepository.findOne({
       select: [
         'id',
