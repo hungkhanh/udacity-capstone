@@ -92,6 +92,20 @@ jobs:
             npm install
             npm run test
 
+  scan-frontend:
+    docker:
+      - image: cimg/node:18.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Scan frontend
+          command: |
+            cd frontend
+            npm install
+            npm audit fix
+
 workflows:
   default:
     jobs:
@@ -105,4 +119,6 @@ workflows:
       - build-frontend
       - test-frontend:
           requires: [build-frontend]
+      - scan-frontend:
+          requires: [build-frontend]          
 
