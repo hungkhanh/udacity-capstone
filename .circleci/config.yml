@@ -61,13 +61,32 @@ jobs:
             npm install
             npm run lint
 
+  build-frontend:
+    docker:
+      - image: cimg/node:16.20
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build frontend
+          command: |
+            cd frontend
+            npm install
+            npm run build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
+
 workflows:
   default:
     jobs:
-      - build-backend:
+      - build-backend
       - test-backend:
           requires: [build-backend]
       - scan-backend:
           requires: [build-backend]
       - lint-backend:
           requires: [build-backend]
+      - build-frontend          
+
