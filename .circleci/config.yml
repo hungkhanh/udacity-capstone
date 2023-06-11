@@ -78,6 +78,20 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
 
+  test-frontend:
+    docker:
+      - image: cimg/node:16.20
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Test frontend
+          command: |
+            cd frontend
+            npm install
+            npm run test
+
 workflows:
   default:
     jobs:
@@ -88,5 +102,7 @@ workflows:
           requires: [build-backend]
       - lint-backend:
           requires: [build-backend]
-      - build-frontend          
+      - build-frontend
+      - test-frontend:
+          requires: [build-frontend]
 
