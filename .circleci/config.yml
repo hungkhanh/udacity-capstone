@@ -94,7 +94,7 @@ jobs:
 
   scan-frontend:
     docker:
-      - image: cimg/node:18.12
+      - image: cimg/node:16.20
     steps:
       - checkout
       - restore_cache:

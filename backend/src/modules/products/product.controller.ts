@@ -37,13 +37,13 @@ export class ProductController {
     return this.productRepository.updateProduct(data);
   }
 
-  @Patch('published')
+  @Put('published')
   publishedProduct(@Query('id') product_id: number) {
     const isPublished = true;
     return this.productRepository.changeProduct(product_id, isPublished);
   }
 
-  @Patch('unpublished')
+  @Put('unpublished')
   unpublishedProduct(@Query('id') product_id: number) {
     const isPublished = false;
     return this.productRepository.changeProduct(product_id, isPublished);
