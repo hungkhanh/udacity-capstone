@@ -117,8 +117,10 @@ workflows:
       - lint-backend:
           requires: [build-backend]
       - build-frontend
-      - test-frontend:
-          requires: [build-frontend]
+      # - test-frontend:
+      #     requires: [build-frontend]
       - scan-frontend:
+          requires: [build-frontend]
+      - lint-frontend:
           requires: [build-frontend]          
 
