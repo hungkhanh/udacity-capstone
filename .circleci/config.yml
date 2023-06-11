@@ -47,7 +47,7 @@ jobs:
           command: |
             cd backend
             npm install
-            npm audit fix
+            npm audit fix --force
 
   lint-backend:
     docker:
@@ -104,7 +104,7 @@ jobs:
           command: |
             cd frontend
             npm install
-            npm audit fix
+            npm audit fix --force
 
   lint-frontend:
     docker:
@@ -114,7 +114,7 @@ jobs:
       - restore_cache:
           keys: [frontend-build]
       - run:
-          name: Scan frontend
+          name: Lint frontend
           command: |
             cd frontend
             npm install
