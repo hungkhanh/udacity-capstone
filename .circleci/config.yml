@@ -106,6 +106,20 @@ jobs:
             npm install
             npm audit fix
 
+  lint-frontend:
+    docker:
+      - image: cimg/node:16.20
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Scan frontend
+          command: |
+            cd frontend
+            npm install
+            npm run lint
+
 workflows:
   default:
     jobs:
