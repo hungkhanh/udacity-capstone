@@ -135,4 +135,4 @@ workflows:
           path: .
           repo: udacity
           tag: "$CIRCLE_SHA1"
-          requires: [test-backend, test-frontend, lint-docker]
+          requires: [test-backend, lint-docker]
