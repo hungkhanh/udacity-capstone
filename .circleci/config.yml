@@ -35,20 +35,6 @@ jobs:
             npm install
             npm run test
 
-  scan-backend:
-    docker:
-      - image: cimg/node:18.12
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [backend-build]
-      - run:
-          name: Scan backend
-          command: |
-            cd backend
-            npm install
-            npm audit fix --force
-
   lint-backend:
     docker:
       - image: cimg/node:18.12
@@ -63,7 +49,7 @@ jobs:
 
   build-frontend:
     docker:
-      - image: cimg/node:16.20
+      - image: cimg/node:18.12
     steps:
       - checkout
       - restore_cache:
@@ -80,7 +66,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: cimg/node:16.20
+      - image: cimg/node:18.12
     steps:
       - checkout
       - restore_cache:
@@ -92,23 +78,9 @@ jobs:
             npm install
             npm run test
 
-  scan-frontend:
-    docker:
-      - image: cimg/node:16.20
-    steps:
-      - checkout
-      - restore_cache:
-          keys: [frontend-build]
-      - run:
-          name: Scan frontend
-          command: |
-            cd frontend
-            npm install
-            npm audit fix --force
-
   lint-frontend:
     docker:
-      - image: cimg/node:16.20
+      - image: cimg/node:18.12
     steps:
       - checkout
       - restore_cache:
@@ -120,21 +92,42 @@ jobs:
             npm install
             npm run lint
 
+  lint-docker:
+    docker:
+      - image: cimg/node:18.12
+    steps:
+      - checkout
+      - run:
+          name: Install hadolint
+          command: |
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x /bin/hadolint
+      - run:
+          name: Lint dockerfile backend
+          command: |
+            cd backend
+            hadolint Dockerfile
+      - run:
+          name: Lint dockerfile frontend
+          command: |
+            cd frontend
+            hadolint Dockerfile
+
 workflows:
   default:
     jobs:
-      - build-backend
+      - lint-backend
+      - build-backend:
+          requires: [lint-backend]
       - test-backend:
           requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - lint-backend:
-          requires: [build-backend]
-      - build-frontend
-      # - test-frontend:
-      #     requires: [build-frontend]
-      - scan-frontend:
+
+      - lint-frontend
+      - build-frontend:
+          requires: [lint-frontend]
+      - test-frontend:
           requires: [build-frontend]
-      - lint-frontend:
-          requires: [build-frontend]          
+      - lint-docker
+
+
 

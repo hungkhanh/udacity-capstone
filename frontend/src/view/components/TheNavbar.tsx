@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 
-function TheNavbar() {
+function TheNavbar(): React.JSX.Element {
   return (
     <Navbar bg="light" expand="lg">
       <Container>

@@ -4,14 +4,14 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 interface BreadcrumbProps {
   listBreadcrumb  : any[];
 }
-function TheBreadcrumb({listBreadcrumb} : BreadcrumbProps) {
+function TheBreadcrumb({listBreadcrumb} : BreadcrumbProps): React.JSX.Element {
   return (
     <Breadcrumb>
-    {
-      listBreadcrumb.map((item : any, index: number) => (
-        <Breadcrumb.Item href={item.href} active={index === (listBreadcrumb.length-1)}>{item.name}</Breadcrumb.Item>
-      ))
-    }
+      {
+        listBreadcrumb.map((item : any, index: number) => (
+          <Breadcrumb.Item href={item.href} active={index === (listBreadcrumb.length-1)}>{item.name}</Breadcrumb.Item>
+        ))
+      }
     </Breadcrumb>
   );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import TheForm from './components/TheForm';
 import Container from 'react-bootstrap/Container';
 
-function CreateProduct() {
+function CreateProduct(): React.JSX.Element {
   return (
     <div>
       <Container>
