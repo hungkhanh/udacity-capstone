@@ -58,7 +58,7 @@ jobs:
           name: Build frontend
           command: |
             cd frontend
-            npm install --force
+            npm install
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -75,7 +75,7 @@ jobs:
           name: Test frontend
           command: |
             cd frontend
-            npm install --force
+            npm install
             npm run test
 
   lint-frontend:
@@ -89,7 +89,7 @@ jobs:
           name: Lint frontend
           command: |
             cd frontend
-            npm install --force
+            npm install
             npm run lint
 
   lint-docker:
@@ -106,12 +106,12 @@ jobs:
           name: Lint dockerfile backend
           command: |
             cd backend
-            hadolint Dockerfile
+            ~/hadolint Dockerfile
       - run:
           name: Lint dockerfile frontend
           command: |
             cd frontend
-            hadolint Dockerfile
+            ~/hadolint Dockerfile
 
 workflows:
   default:
