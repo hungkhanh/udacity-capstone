@@ -58,7 +58,7 @@ jobs:
           name: Build frontend
           command: |
             cd frontend
-            npm install
+            npm install --force
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -75,7 +75,7 @@ jobs:
           name: Test frontend
           command: |
             cd frontend
-            npm install
+            npm install --force
             npm run test
 
   lint-frontend:
@@ -100,7 +100,7 @@ jobs:
       - run:
           name: Install hadolint
           command: |
-            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
             sudo chmod +x /bin/hadolint
       - run:
           name: Lint dockerfile backend
