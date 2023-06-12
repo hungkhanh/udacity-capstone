@@ -100,8 +100,8 @@ jobs:
       - run:
           name: Install hadolint
           command: |
-            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
-            sudo chmod +x /bin/hadolint
+            wget -O ~/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+            sudo chmod +x ~/hadolint
       - run:
           name: Lint dockerfile backend
           command: |
