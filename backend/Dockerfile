@@ -6,7 +6,7 @@ WORKDIR /app
 
 # RUN npm install
 
-COPY . .
+COPY . /app
 
 RUN npm install
 
