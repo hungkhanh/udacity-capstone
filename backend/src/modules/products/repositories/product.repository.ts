@@ -103,9 +103,14 @@ export class ProductRepository {
     if (!foundProduct) {
       throw new NotFoundException('Error: Not found product');
     }
-    return await this.productRepository.update(product_id, {
+    await this.productRepository.update(product_id, {
       isPublished,
     });
+
+    return {
+      message: 'changed',
+      status: 'ok',
+    };
   }
 
   async deleteProduct(product_id: number) {
@@ -118,7 +123,12 @@ export class ProductRepository {
     if (!foundProduct) {
       throw new NotFoundException('Error: Not found product');
     }
-    return await this.productRepository.delete(product_id);
+    await this.productRepository.delete(product_id);
+
+    return {
+      message: 'deleted',
+      status: 'ok',
+    };
   }
 
   private updateProperties(product1, product2) {
