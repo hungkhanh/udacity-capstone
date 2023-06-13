@@ -92,7 +92,7 @@ jobs:
             npm install --force
             npm run lint
 
-  lint-docker:
+  lint-dockerfile:
     docker:
       - image: cimg/node:18.12
     steps:
@@ -134,7 +134,7 @@ workflows:
           path: .
           repo: udacity
           tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-          requires: [test-backend, lint-docker]
+          requires: [test-backend, lint-dockerfile]
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
@@ -142,4 +142,4 @@ workflows:
           path: .
           repo: udacity
           tag: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-          requires: [lint-docker]
+          requires: [lint-dockerfile]
