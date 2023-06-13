@@ -128,13 +128,11 @@ workflows:
           context: udacity
           create-repo: true
           dockerfile: backend/Dockerfile
-          region: AWS_DEFAULT_REGION
           path: .
           repo: udacity
           tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
           requires: [test-backend]
       - aws-ecs/deploy-service-update:
-          aws-region: AWS_DEFAULT_REGION
           family: "udacit-service"
           cluster: "udacity-cluster"
           container-image-name-updates: "container=udacity-backend-service,tag=backend-${CIRCLE_WORKFLOW_ID:0:7}"
@@ -151,7 +149,6 @@ workflows:
           context: udacity
           create-repo: true
           dockerfile: frontend/Dockerfile
-          region: AWS_DEFAULT_REGION
           path: .
           repo: udacity
           tag: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
