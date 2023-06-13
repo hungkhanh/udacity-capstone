@@ -16,7 +16,7 @@ commands:
 jobs:
   build-backend:
     docker:
-      - image: cimg/node:18.12
+      - image: cimg/node:16.20
     steps:
       - checkout
       - restore_cache:
@@ -33,7 +33,7 @@ jobs:
 
   test-backend:
     docker:
-      - image: cimg/node:18.12
+      - image: cimg/node:16.20
     steps:
       - checkout
       - restore_cache:
@@ -47,7 +47,7 @@ jobs:
 
   lint-backend:
     docker:
-      - image: cimg/node:18.12
+      - image: cimg/node:16.20
     steps:
       - checkout
       - restore_cache:
@@ -133,11 +133,11 @@ workflows:
           repo: udacity
           tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
           requires: [test-backend]
-      # - aws-ecs/deploy-service-update:
-      #     family: "udacit-service"
-      #     cluster: "udacity-cluster"
-      #     container-image-name-updates: "container=udacity-backend-service,tag=backend-${CIRCLE_WORKFLOW_ID:0:7}"
-      #     requires: [build-and-push-image-backend]
+      - aws-ecs/deploy-service-update:
+          family: "udacit-service"
+          cluster: "udacity-cluster"
+          container-image-name-updates: "container=udacity-backend-service,tag=backend-${CIRCLE_WORKFLOW_ID:0:7}"
+          requires: [build-and-push-image-backend]
 
   # frontend:
   #   jobs:
