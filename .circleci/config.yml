@@ -126,7 +126,7 @@ workflows:
           requires: [lint-frontend]
       # - test-frontend:
       #     requires: [build-frontend]
-      - lint-docker
+      - lint-dockerfile
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
