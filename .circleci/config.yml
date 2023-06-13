@@ -3,6 +3,15 @@ version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@8.2.1
 
+commands:
+  install_hadolint:
+    description: "Install hadolint v2.12.0"
+    steps:
+      - run:
+          command: |
+            wget -O ~/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+            sudo chmod +x ~/hadolint
+
 jobs:
   build-backend:
     docker:
@@ -40,6 +49,14 @@ jobs:
       - image: cimg/node:18.12
     steps:
       - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - install_hadolint
+      - run:
+          name: Lint dockerfile backend
+          command: |
+            cd backend
+            ~/hadolint Dockerfile
       - run:
           name: Lint backend
           command: |
@@ -85,33 +102,18 @@ jobs:
       - checkout
       - restore_cache:
           keys: [frontend-build]
+      - install_hadolint
+      - run:
+          name: Lint dockerfile frontend
+          command: |
+            cd frontend
+            ~/hadolint Dockerfile          
       - run:
           name: Lint frontend
           command: |
             cd frontend
             npm install --force
             npm run lint
-
-  lint-dockerfile:
-    docker:
-      - image: cimg/node:18.12
-    steps:
-      - checkout
-      - run:
-          name: Install hadolint
-          command: |
-            wget -O ~/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
-            sudo chmod +x ~/hadolint
-      - run:
-          name: Lint dockerfile backend
-          command: |
-            cd backend
-            ~/hadolint Dockerfile
-      - run:
-          name: Lint dockerfile frontend
-          command: |
-            cd frontend
-            ~/hadolint Dockerfile
 
 workflows:
   default:
@@ -126,7 +128,6 @@ workflows:
           requires: [lint-frontend]
       # - test-frontend:
       #     requires: [build-frontend]
-      - lint-dockerfile
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
@@ -134,7 +135,7 @@ workflows:
           path: .
           repo: udacity
           tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-          requires: [test-backend, lint-dockerfile]
+          requires: [test-backend]
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
@@ -142,4 +143,4 @@ workflows:
           path: .
           repo: udacity
           tag: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-          requires: [lint-dockerfile]
+          # requires: [test-frontend]
