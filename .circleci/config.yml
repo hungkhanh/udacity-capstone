@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   aws-ecr: circleci/aws-ecr@8.2.1
+  aws-ecs: circleci/aws-ecs@3.2.0
 
 commands:
   install_hadolint:
@@ -107,7 +108,7 @@ jobs:
           name: Lint dockerfile frontend
           command: |
             cd frontend
-            ~/hadolint Dockerfile          
+            ~/hadolint Dockerfile
       - run:
           name: Lint frontend
           command: |
@@ -116,13 +117,31 @@ jobs:
             npm run lint
 
 workflows:
-  default:
+  backend:
     jobs:
       - lint-backend
       - build-backend:
           requires: [lint-backend]
       - test-backend:
           requires: [build-backend]
+      - aws-ecr/build-and-push-image:
+          context: udacity
+          create-repo: true
+          dockerfile: backend/Dockerfile
+          region: AWS_DEFAULT_REGION
+          path: .
+          repo: udacity
+          tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+          requires: [test-backend]
+      - aws-ecs/deploy-service-update:
+          aws-region: AWS_DEFAULT_REGION
+          family: "udacit-service"
+          cluster-name: "udacity-cluster"
+          container-image-name-updates: "container=udacity-backend-service,tag=backend-${CIRCLE_WORKFLOW_ID:0:7}"
+          requires: [aws-ecr/build-and-push-image]
+
+  frontend:
+    jobs:
       - lint-frontend
       - build-frontend:
           requires: [lint-frontend]
@@ -131,15 +150,8 @@ workflows:
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
-          dockerfile: backend/Dockerfile
-          path: .
-          repo: udacity
-          tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-          requires: [test-backend]
-      - aws-ecr/build-and-push-image:
-          context: udacity
-          create-repo: true
           dockerfile: frontend/Dockerfile
+          region: AWS_DEFAULT_REGION
           path: .
           repo: udacity
           tag: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
