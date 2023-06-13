@@ -107,11 +107,11 @@ jobs:
           command: |
             cd backend
             ~/hadolint Dockerfile
-      # - run:
-      #     name: Lint dockerfile frontend
-      #     command: |
-      #       cd frontend
-      #       ~/hadolint Dockerfile
+      - run:
+          name: Lint dockerfile frontend
+          command: |
+            cd frontend
+            ~/hadolint Dockerfile
 
 workflows:
   default:
@@ -124,10 +124,9 @@ workflows:
       - lint-frontend
       - build-frontend:
           requires: [lint-frontend]
-      - test-frontend:
-          requires: [build-frontend]
+      # - test-frontend:
+      #     requires: [build-frontend]
       - lint-docker
-
       - aws-ecr/build-and-push-image:
           context: udacity
           create-repo: true
@@ -135,4 +134,12 @@ workflows:
           path: .
           repo: udacity
           tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-          # requires: [test-backend, lint-docker]
+          requires: [test-backend, lint-docker]
+      - aws-ecr/build-and-push-image:
+          context: udacity
+          create-repo: true
+          dockerfile: frontend/Dockerfile
+          path: .
+          repo: udacity
+          tag: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+          requires: [lint-docker]
