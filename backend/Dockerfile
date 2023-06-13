@@ -2,12 +2,12 @@ FROM node:18
 
 WORKDIR /app
 
-COPY ./package.json /app
+COPY package.json /app/
 
-# RUN npm install
+COPY . /app/
 
-RUN ls && pwd
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["node","dist/main.js"]
+CMD ["npm","start"]

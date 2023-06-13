@@ -134,5 +134,5 @@ workflows:
           dockerfile: backend/Dockerfile
           path: .
           repo: udacity
-          tag: "$CIRCLE_SHA1"
+          tag: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
           # requires: [test-backend, lint-docker]
