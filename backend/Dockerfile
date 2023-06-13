@@ -2,14 +2,12 @@ FROM node:18
 
 WORKDIR /app
 
-COPY backend/package*.json /app
-
-RUN npm install
+COPY backend/package.json /app
 
 COPY backend /app
 
-RUN npm run build
+RUN npm install
 
 EXPOSE 3000
 
-CMD ["node","dist/main.js"]
+CMD ["npm","start"]
