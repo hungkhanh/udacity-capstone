@@ -2,13 +2,11 @@ FROM node:18
 
 WORKDIR /app
 
-COPY backend/package.json /app
+COPY backend/package.json /app/
+
+COPY backend /app/
 
 RUN npm install
-
-COPY backend /app
-
-RUN npm run build
 
 EXPOSE 3000
 
