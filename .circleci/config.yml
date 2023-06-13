@@ -117,7 +117,7 @@ jobs:
             npm run lint
 
 workflows:
-  backend:
+  default:
     jobs:
       - lint-backend
       - build-backend:
@@ -138,8 +138,8 @@ workflows:
           container-image-name-updates: "container=udacity-backend-service,tag=backend-${CIRCLE_WORKFLOW_ID:0:7}"
           requires: [aws-ecr/build-and-push-image]
 
-  frontend:
-    jobs:
+  # frontend:
+  #   jobs:
       - lint-frontend
       - build-frontend:
           requires: [lint-frontend]
