@@ -4,9 +4,9 @@ WORKDIR /app
 
 COPY backend/package.json /app
 
-COPY backend /app
-
 RUN npm install
+
+COPY backend /app
 
 EXPOSE 3000
 
